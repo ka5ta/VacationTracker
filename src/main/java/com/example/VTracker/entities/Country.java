@@ -1,9 +1,14 @@
 package com.example.VTracker.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Locale;
 
 @Entity
 @Data
@@ -15,8 +20,19 @@ public class Country implements Comparable<Country> {
     @Size(min=2, max=2)
     private String id;
 
+    @NotNull
     @Column(unique = true)
     private String countryName;
+
+    public Country() {
+        super();
+    }
+
+    @JsonCreator
+    public Country(String id) {
+        this.id = id;
+        this.countryName= new Locale("", id).getDisplayCountry();
+    }
 
     @Override
     public int compareTo(Country country) {

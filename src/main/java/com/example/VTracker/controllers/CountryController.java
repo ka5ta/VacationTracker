@@ -4,6 +4,7 @@ import com.example.VTracker.entities.Country;
 import com.example.VTracker.repository.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -17,27 +18,37 @@ public class CountryController {
     @Autowired
     private CountryRepository countryRepository;
 
-    @PostMapping("/add")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Country addCountry(@RequestBody Country country) {
+    public Country saveCountry(@RequestBody Country country) {
         return countryRepository.save(country);
     }
 
-    @GetMapping("/")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Iterable<Country> getCountryList() {
         return countryRepository.findAll();
     }
 
-    @DeleteMapping("/delete")
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Country>> country(@PathVariable("id") String id) {
+        Optional<Country> countryById = countryRepository.findById(id);
+        if (countryById.isPresent()) {
+            return new ResponseEntity(countryById, HttpStatus.OK);
+        } else {
+            return new ResponseEntity("No such country: "+id, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody
-    String deleteCountry(String id) {
+    public String deleteCountry(@PathVariable("id") String id) {
         countryRepository.deleteById(id);
         return String.format("Country id: %s is deleted.", id);
     }
 
-    @GetMapping("/all")
+
+    @GetMapping("/full-list")
     @ResponseStatus(HttpStatus.OK)
     public Map<String, String> countryList() {
         List<String> countries = Arrays.asList(Locale.getISOCountries());
