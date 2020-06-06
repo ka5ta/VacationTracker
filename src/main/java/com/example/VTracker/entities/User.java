@@ -2,6 +2,8 @@ package com.example.VTracker.entities;
 
 
 
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -27,7 +29,8 @@ public class User {
     @NotEmpty
     private String email;
 
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="country_id")
     private Country country;
 

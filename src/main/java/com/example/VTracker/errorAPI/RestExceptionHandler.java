@@ -16,8 +16,11 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public NoSuchEntityError handleNotFoundResult(HttpServletRequest req, EmptyResultDataAccessException exception){
-        return new NoSuchEntityError();
-    //todo NoSuchEntityError class more useful
+        String message = "";
+        String reqPath = req.getServletPath();
+        String exceptionMessage = exception.getMessage();
+        return new NoSuchEntityError(message,reqPath,exceptionMessage);
+
     }
 
 }

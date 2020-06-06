@@ -1,13 +1,14 @@
 package com.example.VTracker.entities;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @Entity
@@ -24,12 +25,13 @@ public class Country implements Comparable<Country> {
     @Column(unique = true)
     private String countryName;
 
+
     public Country() {
         super();
     }
 
     @JsonCreator
-    public Country(String id) {
+    public Country(@JsonProperty("id") String id) {
         this.id = id;
         this.countryName= new Locale("", id).getDisplayCountry();
     }
