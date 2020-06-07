@@ -1,30 +1,41 @@
 package com.example.VTracker.errorAPI;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.http.HttpStatus;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ApiError {
+@Data
+@JsonIgnoreProperties({"cause","stackTrace","localizedMessage","suppressed"})
+public class ApiError extends Throwable {
 
-    private HttpStatus status;
     private LocalDateTime timestamp;
-    private String message;
+    protected String message;
+    private String reqPath;
     private String debugMessage;
-    private List<ApiSubError> subErrors;
 
-    private ApiError(){
+
+    protected ApiError(){
+        super();
         timestamp = LocalDateTime.now();
     }
 
-    ApiError(HttpStatus status){
+    ApiError(String message, HttpServletRequest req) {
         this();
-        this.status = status;
+        this.message = message;
+        this.reqPath = req.getServletPath();
     }
 
-    ApiError(HttpStatus status, Throwable ex) {
-        this(status);
-        this.message = "Unexpected error";
+    ApiError(String message, HttpServletRequest req,  Exception ex) {
+        this();
+        this.message = message;
+        this.reqPath = req.getServletPath();
         this.debugMessage = ex.getLocalizedMessage();
     }
+
 }

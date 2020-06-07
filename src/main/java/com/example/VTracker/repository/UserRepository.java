@@ -9,5 +9,6 @@ import java.util.Optional;
 public interface UserRepository extends CrudRepository<User,Integer> {
 
     List<User> findByLastnameOrName(String lastname, String name);
-    List<User> removeByAdUserID(String adUserID);
+    //List<User> deleteByAdUserID(String adUserID);
+    Optional <User> findByAdUserID(String adUserID);
 }

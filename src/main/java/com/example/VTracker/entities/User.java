@@ -18,6 +18,7 @@ public class User {
     private Integer id;
 
     @Column(unique = true)
+    @NotEmpty
     private String adUserID;
 
     @NotEmpty
@@ -33,6 +34,7 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="country_id")
     private Country country;
+    //todo URGENT: Country is mapped as String not Object which cause throwing exception, and Country require object
 
     private int vacationDays;
 

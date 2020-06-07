@@ -38,7 +38,7 @@ public class CountryController {
         } else {
             return new ResponseEntity("No such country: "+id, HttpStatus.NOT_FOUND);
         }
-    }
+    }//todo OPTIONAL: create CountryService that will handle throwing exception instead of Optional
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -52,16 +52,15 @@ public class CountryController {
     @ResponseStatus(HttpStatus.OK)
     public Map<String, String> countryList() {
         List<String> countries = Arrays.asList(Locale.getISOCountries());
-        TreeMap<String, String> list;
-
 
         return  countries.stream()
-                .map(String::toUpperCase)
+                .map(String::toUpperCase)  //country->country.toUpperCase()
                 .collect(Collectors.toMap(
-                        Function.identity(),
-                        cc -> new Locale("", cc).getDisplayCountry(),
+                        Function.identity(),  //key: country->country
+                        cc -> new Locale("", cc).getDisplayCountry(), //value
                         (v1,v2)->{throw new RuntimeException(String.format("Duplicate key for values %s and %s", v1, v2)); },
-                        TreeMap::new
+                        TreeMap::new  //TreeMap enforce countries sorting order
                 ));
     }
 }
+// todo OPTIONAL: Tests for Controllers
