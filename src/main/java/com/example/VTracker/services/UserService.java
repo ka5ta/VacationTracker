@@ -20,5 +20,5 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findByAdUserID(adUserID);
         User user = optionalUser.orElseThrow(() -> new NoSuchUserException(adUserID));
         userRepository.delete(user);
-    }//todo NEXT: build Exception Handler for this method
+    }
 }

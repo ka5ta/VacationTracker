@@ -1,7 +1,9 @@
 package com.example.VTracker.controllers;
 
 import com.example.VTracker.entities.Country;
+import com.example.VTracker.errorAPI.NoSuchCountryCodeException;
 import com.example.VTracker.repository.CountryRepository;
+import com.example.VTracker.services.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,8 @@ public class CountryController {
 
     @Autowired
     private CountryRepository countryRepository;
+    @Autowired
+    private CountryService countryService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -31,21 +35,16 @@ public class CountryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Country>> country(@PathVariable("id") String id) {
-        Optional<Country> countryById = countryRepository.findById(id);
-        if (countryById.isPresent()) {
-            return new ResponseEntity(countryById, HttpStatus.OK);
-        } else {
-            return new ResponseEntity("No such country: "+id, HttpStatus.NOT_FOUND);
-        }
-    }//todo OPTIONAL: create CountryService that will handle throwing exception instead of Optional
+    public Country country(@PathVariable("id") String id) throws NoSuchCountryCodeException {
+        return countryService.searchById(id);
+    } //todo NEXT: to test this method and eventually add exceptionHandler
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String deleteCountry(@PathVariable("id") String id) {
         countryRepository.deleteById(id);
         return String.format("Country id: %s is deleted.", id);
-    }
+    }//todo OPTIONAL: create CountryService that will handle throwing exception instead of String
 
 
     @GetMapping("/full-list")

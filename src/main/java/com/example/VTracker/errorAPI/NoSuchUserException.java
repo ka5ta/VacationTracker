@@ -9,6 +9,7 @@ public class NoSuchUserException extends ApiError{
 
     public NoSuchUserException(String adUserID) {
         super();
+        this.adUserID = adUserID;
         this.message="No such user with ID: "+adUserID;
 
     }

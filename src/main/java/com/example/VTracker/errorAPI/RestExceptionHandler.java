@@ -73,7 +73,9 @@ public class RestExceptionHandler {
         return new EntityValidationError(ex);
     }
 
-
-
+    @ExceptionHandler(NoSuchUserException.class)
+    public ApiError handleNoSuchUserError(HttpServletRequest req, NoSuchUserException ex){
+        return ex;
+    }
 
 }

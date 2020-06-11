@@ -2,6 +2,7 @@ package com.example.VTracker.controllers;
 
 
 import com.example.VTracker.entities.User;
+import com.example.VTracker.errorAPI.NoSuchUserException;
 import com.example.VTracker.repository.UserRepository;
 import com.example.VTracker.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class UserController {
 
     @DeleteMapping(path = "/{adUserID}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@PathVariable("adUserID") String adUserID) {
+    public void deleteUser(@PathVariable("adUserID") String adUserID) throws NoSuchUserException {
         userService.deleteByAdUserID(adUserID);
 
 
