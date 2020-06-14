@@ -78,4 +78,9 @@ public class RestExceptionHandler {
         return ex;
     }
 
+    @ExceptionHandler(NoSuchCountryCodeException.class)
+    public NoSuchCountryCodeException handleNoSuchCountryError(HttpServletRequest req, NoSuchCountryCodeException ex){
+        return ex;
+    }
+
 }
