@@ -6,6 +6,7 @@ import com.example.VTracker.errorAPI.NoSuchUserException;
 import com.example.VTracker.repository.UserRepository;
 import com.example.VTracker.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -29,18 +30,17 @@ public class UserController {
     }
 
 
-    @GetMapping
+    @GetMapping(path="/all")
     @ResponseStatus(HttpStatus.OK)
     public Iterable<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findByOrderByLastnameAsc();
     }
 
 
-    @GetMapping(path = "/usersByNameOrLastname")
+    @GetMapping
     public @ResponseBody
-    Iterable<User> findByLastnameOrName(@RequestParam String lastname, @RequestParam String name) {
-        return userRepository.findByLastnameOrName(lastname, name);
-        //todo NEXT: searching by part of lastName
+    List<User> findUsersByKeyword(@RequestParam String keyword) {
+        return userRepository.findUsersByKeyword(keyword);
     }
 
 
@@ -48,9 +48,13 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@PathVariable("adUserID") String adUserID) throws NoSuchUserException {
         userService.deleteByAdUserID(adUserID);
-
-
         //return String.format("User with ID:%s, Name:%s, Lastname:%s was removed.", user.getId(), user.getName(), user.getLastname());
+    }
+
+    @GetMapping(path = "/{adUserID}")
+    @ResponseStatus(HttpStatus.OK)
+    public User findUserByID(@PathVariable("adUserID") String adUserID) throws NoSuchUserException {
+        return userService.findUserByAdUserID(adUserID);
     }
 }
 
