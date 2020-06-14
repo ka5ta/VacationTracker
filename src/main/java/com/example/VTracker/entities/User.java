@@ -31,7 +31,7 @@ public class User {
     private String email;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="country_id")
     private Country country;
     //todo URGENT: Country is mapped as String not Object which cause throwing exception, and Country require object
@@ -40,3 +40,5 @@ public class User {
 
 
 }
+
+//todo user Admin, Standard user, Calendar + bank holidays, Storing requested holidays, approval route
