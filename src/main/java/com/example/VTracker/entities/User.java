@@ -30,6 +30,9 @@ public class User {
     @NotEmpty
     private String email;
 
+    @NotEmpty
+    private String hashedPassword;
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="country_id")
