@@ -9,16 +9,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<User,Integer> {
+public interface UserRepository extends CrudRepository<User, Integer> {
 
 
-
-    Optional <User> findByAdUserID(String adUserID);
+    Optional<User> findByAdUserID(String adUserID);
 
     Iterable<User> findByOrderByLastnameAsc();
 
 
-    @Query(value="SELECT * FROM users u " +
+    @Query(value = "SELECT * FROM users u " +
             "WHERE u.name COLLATE utf8_general_ci LIKE %:keyword% COLLATE utf8_general_ci " +
             "OR u.lastname COLLATE utf8_general_ci LIKE %:keyword% COLLATE utf8_general_ci " +
             "ORDER BY u.lastname ASC", nativeQuery = true)

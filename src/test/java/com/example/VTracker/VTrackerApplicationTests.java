@@ -15,27 +15,27 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class VTrackerApplicationTests {
 
-	@Autowired
-	private LeaveService leaveService;
+    @Autowired
+    private LeaveService leaveService;
 
-	@Test
-	public void isWeekendTest() {
-		LocalDate date = LocalDate.of(2020, 6,28);
-		assertTrue(leaveService.isWeekend(date));
+    @Test
+    public void isWeekendTest() {
+        LocalDate date = LocalDate.of(2020, 6, 28);
+        assertTrue(leaveService.isWeekend(date));
 
-	}
+    }
 
-	@Test
-	public void isNotWeekendTest() {
-		LocalDate date = LocalDate.of(2020, 6,29);
-		assertFalse(leaveService.isWeekend(date));
-	}
+    @Test
+    public void isNotWeekendTest() {
+        LocalDate date = LocalDate.of(2020, 6, 29);
+        assertFalse(leaveService.isWeekend(date));
+    }
 
-	@Test
-	public void isCountWeekDaysCorrectTest() {
+    @Test
+    public void isCountWeekDaysCorrectTest() {
 
 //todo https://www.baeldung.com/spring-jpa-test-in-memory-database
-	}
+    }
 
 
 }

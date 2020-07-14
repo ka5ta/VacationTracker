@@ -5,6 +5,7 @@ import com.example.VTracker.entities.Country;
 import com.example.VTracker.entities.LeaveRequest;
 import com.example.VTracker.repository.HolidaysRepository;
 import com.example.VTracker.repository.LeaveRepository;
+import com.example.VTracker.staticCategories.LeaveStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
@@ -12,9 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 @Service
 public class LeaveService {
@@ -35,34 +34,71 @@ public class LeaveService {
         LocalDate startDate = leaveRequest.getStartDate();
         LocalDate endDate = leaveRequest.getEndDate();
 
-        Collection<BankHoliday> allHolidaysByCountryAndDateRange =
+        List<BankHoliday> allHolidaysByCountryAndDateRange =
                 holidaysRepository.findAllHolidaysByCountryAndDateRange(
                         country, startDate, endDate
                 );
 
-        // var sortedHolidays = sort(allHolidays)
-        // var nextHoliday = sortedHolidays.first()
+/*        Collections.sort(allHolidaysByCountryAndDateRange,
+                new Comparator<BankHoliday>() {
+                    @Override
+                    public int compare(BankHoliday h1, BankHoliday h2) {
+                        return h1.getDay().compareTo(h2.getDay());
+                    }
+                });*/
 
+
+// < ------ this will  order items from early date till later date ---->
+        allHolidaysByCountryAndDateRange.sort(Comparator.comparing(b -> b.getDay()));
+
+
+        // LocalDate nextHoliday = allHolidaysByCountryAndDateRange.get(0).getDay();
         int countDays = 0;
-        for(LocalDate date = startDate; date.isBefore(endDate); date=date.plusDays(1)){
-            if(isWeekend(date)){
+        for (LocalDate date = startDate; date.isBefore(endDate) || date.isEqual(endDate); date = date.plusDays(1)) {
+            if (isWeekend(date)) {
                 continue;
-            }else {
-                LocalDate finalDate = date;
-                // if (date == nextHoliday) {
-                //   nextHoliday = sortedHolidays.after(nextHoliday)
-                //   continue;
-                // }
-                if(allHolidaysByCountryAndDateRange.stream()
-                                .anyMatch(day -> day.getDay().equals(finalDate))
-                ){
-                    continue;
-                }else{
-                    countDays++;
-                }
             }
+
+            //if(nextHoliday!=null) {
+            //todo iterate through sorted bank holidays
+            final LocalDate currentDate = date;
+            if (allHolidaysByCountryAndDateRange.stream()
+                    .anyMatch(day -> day.getDay().equals(currentDate))
+            ) {
+                continue;
+            }
+            //}
+
+            countDays++;
         }
         leaveRequest.setLeaveCost(countDays);
+    }
+
+
+    public LeaveRequest save(LeaveRequest leaveRequest) {
+        countLeaveDays(leaveRequest);
+        return leaveRepository.save(leaveRequest);
+    }
+
+    public void updatePartiallyRequest(LeaveRequest leaveRequest, Map<String, Object> updates) {
+
+        for (Map.Entry<String, Object> entry : updates.entrySet()) {
+            switch (entry.getKey()) {
+                case "status":
+                    String k = (String) entry.getValue();
+                    LeaveStatus leaveStatus = LeaveStatus.valueOf(k);
+                    leaveRequest.setLeaveStatus(leaveStatus);
+                    break;
+                //case "approver":
+                //todo add approver change here
+                default:
+                    throw new IllegalArgumentException("Wrong key name");
+
+            }
+            leaveRepository.save(leaveRequest);
+
+        }
+
     }
 
 
