@@ -12,7 +12,7 @@ public class NoSuchCountryCodeException extends ApiError {
 
     public NoSuchCountryCodeException(String countryCode) {
         super();
-        this.message = "There is no such Country code as: "+countryCode;
+        this.message = "There is no such Country code as: " + countryCode;
         this.countryCode = countryCode;
     }
 }

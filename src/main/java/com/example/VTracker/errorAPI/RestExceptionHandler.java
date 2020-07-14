@@ -27,28 +27,28 @@ public class RestExceptionHandler {
     // -- Handles exception from HttpRequest for deleting or getting not existing entity --//
     @ExceptionHandler(EmptyResultDataAccessException.class)
     //@ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ApiError handleNotFoundResult(HttpServletRequest req, EmptyResultDataAccessException exception){
+    protected ApiError handleNotFoundResult(HttpServletRequest req, EmptyResultDataAccessException exception) {
         String message = "No such element in database";
-        return new ApiError(message, req,exception);
+        return new ApiError(message, req, exception);
     }
 
     // -- Handle duplicated values addition --//
     @ExceptionHandler(DataIntegrityViolationException.class)
     //@ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Properties handleDuplicatedValue(HttpServletRequest req, DataIntegrityViolationException exception){
+    public Properties handleDuplicatedValue(HttpServletRequest req, DataIntegrityViolationException exception) {
         String className = exception.getStackTrace().getClass().getName();
         String rootCause = exception.getRootCause().getMessage();
 
         Properties properties = new Properties();
         properties.setProperty("error", rootCause);
-        properties.setProperty("class",className);
+        properties.setProperty("class", className);
         return properties;
     }
 
     // -- Handle 'NoSuchCountryCodeException' adding country code which doesn't exist in ISO Country list --//
     @ExceptionHandler(HttpMessageNotReadableException.class)
     //@ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleMissingCountryCode(HttpServletRequest req, HttpMessageNotReadableException exception){
+    public ApiError handleMissingCountryCode(HttpServletRequest req, HttpMessageNotReadableException exception) {
         Throwable rootCause = exception.getRootCause();
         if (rootCause instanceof NoSuchCountryCodeException) {
             return (NoSuchCountryCodeException) rootCause;
@@ -60,26 +60,26 @@ public class RestExceptionHandler {
     // -- returns root cause error -- //
     @ExceptionHandler(TransactionSystemException.class)
     // @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected EntityValidationError handleConstraintValidation(HttpServletRequest req, TransactionSystemException exception){
+    protected EntityValidationError handleConstraintValidation(HttpServletRequest req, TransactionSystemException exception) {
 
-        ConstraintViolationException rootCause =(ConstraintViolationException)exception.getRootCause();
+        ConstraintViolationException rootCause = (ConstraintViolationException) exception.getRootCause();
         return new EntityValidationError(rootCause);
     }
 
 
     @ExceptionHandler(ConstraintViolationException.class)
     //@ResponseStatus(HttpStatus.BAD_REQUEST)
-    public EntityValidationError handleConstraintViolationError(HttpServletRequest req, ConstraintViolationException ex ){
+    public EntityValidationError handleConstraintViolationError(HttpServletRequest req, ConstraintViolationException ex) {
         return new EntityValidationError(ex);
     }
 
     @ExceptionHandler(NoSuchUserException.class)
-    public ApiError handleNoSuchUserError(HttpServletRequest req, NoSuchUserException ex){
+    public ApiError handleNoSuchUserError(HttpServletRequest req, NoSuchUserException ex) {
         return ex;
     }
 
     @ExceptionHandler(NoSuchCountryCodeException.class)
-    public NoSuchCountryCodeException handleNoSuchCountryError(HttpServletRequest req, NoSuchCountryCodeException ex){
+    public NoSuchCountryCodeException handleNoSuchCountryError(HttpServletRequest req, NoSuchCountryCodeException ex) {
         return ex;
     }
 
