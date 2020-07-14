@@ -12,11 +12,13 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name="leave_request")
+@Table(name = "leave_request")
 public class LeaveRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "my_sequence", sequenceName = "dbsequence",
+            initialValue = 1000)
     private Integer id;
 
     @NotNull
