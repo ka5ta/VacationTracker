@@ -17,12 +17,13 @@ import java.util.Locale;
 
 @Entity
 @Data
-@Table(name="country_list")
+@Table(name = "country_list")
 public class Country implements Comparable<Country> {
 
     @Id
-    @Column(length=2)
-    @Size(min=2, max=2)
+    @Column(length = 2)
+    @Size(min = 2, max = 2)
+    @JsonProperty("id")
     private String id;
 
     @NotNull
@@ -30,17 +31,18 @@ public class Country implements Comparable<Country> {
     private String countryName;
 
 
+
     public Country() {
         super();
     }
 
     @JsonCreator
-    public Country(@JsonProperty("id") String id) throws NoSuchCountryCodeException {
+    public Country(String id) throws NoSuchCountryCodeException {
         this.id = id;
         List<String> countryIDs = Arrays.asList(Locale.getISOCountries());
-        if(countryIDs.contains(getId())) {
+        if (countryIDs.contains(getId())) {
             this.countryName = new Locale("", id).getDisplayCountry();
-        }else throw new NoSuchCountryCodeException(id);
+        } else throw new NoSuchCountryCodeException(id);
     }
 
     @Override

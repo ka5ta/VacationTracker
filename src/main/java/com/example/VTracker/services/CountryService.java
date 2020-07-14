@@ -16,7 +16,7 @@ public class CountryService {
 
     public Country searchById(String id) throws NoSuchCountryCodeException {
         Optional<Country> optionalCountry = countryRepository.findById(id);
-        return optionalCountry.orElseThrow(()->new NoSuchCountryCodeException(id));
+        return optionalCountry.orElseThrow(() -> new NoSuchCountryCodeException(id));
 
     }
 

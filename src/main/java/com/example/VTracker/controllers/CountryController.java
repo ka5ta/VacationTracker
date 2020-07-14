@@ -52,12 +52,14 @@ public class CountryController {
     public Map<String, String> countryList() {
         List<String> countries = Arrays.asList(Locale.getISOCountries());
 
-        return  countries.stream()
+        return countries.stream()
                 .map(String::toUpperCase)  //country->country.toUpperCase()
                 .collect(Collectors.toMap(
                         Function.identity(),  //key: country->country
                         cc -> new Locale("", cc).getDisplayCountry(), //value
-                        (v1,v2)->{throw new RuntimeException(String.format("Duplicate key for values %s and %s", v1, v2)); },
+                        (v1, v2) -> {
+                            throw new RuntimeException(String.format("Duplicate key for values %s and %s", v1, v2));
+                        },
                         TreeMap::new  //TreeMap enforce countries sorting order
                 ));
     }

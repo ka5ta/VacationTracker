@@ -18,11 +18,11 @@ public class HolidaysController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BankHoliday addBankHoliday(@RequestBody BankHoliday holiday){
+    public BankHoliday addBankHoliday(@RequestBody BankHoliday holiday) {
         return holidaysRepository.save(holiday);
     }
 
-    @GetMapping(path="/all")
+    @GetMapping(path = "/all")
     @ResponseStatus(HttpStatus.OK)
     public Iterable<BankHoliday> getAllBankHolidays() {
         return holidaysRepository.findAll();
@@ -30,7 +30,7 @@ public class HolidaysController {
 
     @DeleteMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteBankHoliday(@PathVariable("id") Integer id)  {
+    public void deleteBankHoliday(@PathVariable("id") Integer id) {
         holidaysRepository.deleteById(id);
 
     }

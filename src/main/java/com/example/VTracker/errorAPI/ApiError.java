@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@JsonIgnoreProperties({"cause","stackTrace","localizedMessage","suppressed"})
+@JsonIgnoreProperties({"cause", "stackTrace", "localizedMessage", "suppressed"})
 public class ApiError extends Throwable {
 
     private LocalDateTime timestamp;
@@ -20,7 +20,7 @@ public class ApiError extends Throwable {
     private String debugMessage;
 
 
-    protected ApiError(){
+    public ApiError() {
         super();
         timestamp = LocalDateTime.now();
     }
@@ -31,7 +31,7 @@ public class ApiError extends Throwable {
         this.reqPath = req.getServletPath();
     }
 
-    ApiError(String message, HttpServletRequest req,  Exception ex) {
+    ApiError(String message, HttpServletRequest req, Exception ex) {
         this();
         this.message = message;
         this.reqPath = req.getServletPath();

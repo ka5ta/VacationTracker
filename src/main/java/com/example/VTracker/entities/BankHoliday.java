@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name="holidays")
+@Table(name = "holidays")
 public class BankHoliday {
 
     @Id
@@ -23,7 +23,9 @@ public class BankHoliday {
     private LocalDate day;
 
     @NotEmpty
-    @JoinColumn(name="country_id")
+    @JoinColumn(name = "country_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private Country country;
+
+
 }
